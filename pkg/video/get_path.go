@@ -9,10 +9,7 @@ import (
 )
 
 func getPath(url, folder string) (string, error) {
-	title, err := getVideoTitle(url)
-	if err != nil {
-		return "", fmt.Errorf("erro ao obter título do vídeo: %v", err)
-	}
+	title := getVideoTitle(url)
 
 	folder = text.Sanitize(folder)
 
@@ -21,7 +18,7 @@ func getPath(url, folder string) (string, error) {
 		return "", err
 	}
 
-	path := path.Join(folder, title+".mp4")
+	path := path.Join(folder, title)
 
 	if _, err := os.Stat(path); err == nil {
 		return path, nil

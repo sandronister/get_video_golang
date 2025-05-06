@@ -7,6 +7,8 @@ import (
 )
 
 func getRegular(url, path string) (string, error) {
+	path = path + ".mp4"
+
 	fmt.Printf("Baixando vídeo %s em qualidade regular...\n", url)
 	cmd := exec.Command("yt-dlp", "-f", "mp4", "-o", path, url)
 	cmd.Stdout = os.Stdout

@@ -1,22 +1,21 @@
 package video
 
 import (
-	"fmt"
 	"os/exec"
 
 	"github.com/sandronister/get_video_golang/pkg/text"
 )
 
-func getVideoTitle(url string) (string, error) {
+func getVideoTitle(url string) string {
 	cmd := exec.Command("yt-dlp", "--get-title", url)
 
 	output, err := cmd.Output()
 	if err != nil {
-		return "", fmt.Errorf("erro ao obter título do vídeo: %v", err)
+		return "video-title"
 	}
 
 	title := string(output)
 	title = text.Sanitize(title)
 
-	return title, nil
+	return title
 }
