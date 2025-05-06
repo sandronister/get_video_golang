@@ -16,8 +16,6 @@ func DownloadVideo(url, folder, quality string) (string, error) {
 
 	quality = text.Sanitize(quality)
 
-	fmt.Println("Qualidade escolhida:=======>", quality)
-	fmt.Println("Essa condição é verdadeira?=======>", quality == "S" || quality == "s")
 	if quality == "S" || quality == "s" {
 		return getQuality(url, path)
 	}

@@ -7,8 +7,8 @@ import (
 )
 
 func getQuality(url, path string) (string, error) {
-	fmt.Printf("Baixando vídeo %s em qualidade superior...\n", url)
-	cmd := exec.Command("yt-dlp", "-f", "bestvideo+bestaudio/best", "-o", path, url)
+	fmt.Printf("Baixando vídeo %s em qualidade 720p...\n", url)
+	cmd := exec.Command("yt-dlp", "-f", "bestvideo[height=720]+bestaudio/best[height=720]", "-o", path, url)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
