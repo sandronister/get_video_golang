@@ -29,7 +29,12 @@ func sanitizeFolderName(folder string) string {
 	return folder
 }
 
-func getPath(folder string) (string, error) {
+func getPath(url, folder string) (string, error) {
+	title, err := getVideoTitle(url)
+	if err != nil {
+		return "", fmt.Errorf("erro ao obter título do vídeo: %v", err)
+	}
+
 	folder = sanitizeFolderName(folder)
 
 	if err := os.MkdirAll(folder, os.ModePerm); err != nil {
@@ -37,7 +42,7 @@ func getPath(folder string) (string, error) {
 		return "", err
 	}
 
-	path := path.Join(folder, "video.mp4")
+	path := path.Join(folder, title+".mp4")
 
 	if _, err := os.Stat(path); err == nil {
 		return path, nil
@@ -50,7 +55,24 @@ func getPath(folder string) (string, error) {
 	return "", fmt.Errorf("erro ao verificar o arquivo")
 }
 
-func getVideoName(url, path string) (string, error) {
+func getVideoTitle(url string) (string, error) {
+	cmd := exec.Command("yt-dlp", "--get-title", url)
+
+	// Captura a saída diretamente
+	output, err := cmd.Output()
+	if err != nil {
+		return "", fmt.Errorf("erro ao obter título do vídeo: %v", err)
+	}
+
+	// Remove espaços em branco extras
+	title := string(output)
+	title = sanitizeFolderName(title)
+
+	return title, nil
+}
+
+func getVideo(url, path string) (string, error) {
+
 	cmd := exec.Command("yt-dlp", "-f", "mp4", "-o", path, url)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -66,7 +88,7 @@ func getVideoName(url, path string) (string, error) {
 
 func DownloadVideo(url, folder string) (string, error) {
 
-	path, err := getPath(folder)
+	path, err := getPath(url, folder)
 
 	if err != nil {
 		return "", fmt.Errorf("erro ao criar diretório: %v", err)
@@ -74,6 +96,6 @@ func DownloadVideo(url, folder string) (string, error) {
 
 	fmt.Printf("Baixando vídeo de %s para %s\n", url, path)
 
-	return getVideoName(url, path)
+	return getVideo(url, path)
 
 }
