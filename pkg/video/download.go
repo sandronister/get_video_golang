@@ -29,8 +29,7 @@ func sanitizeFolderName(folder string) string {
 	return folder
 }
 
-func DownloadVideo(url, folder string) (string, error) {
-
+func getPath(folder string) (string, error) {
 	folder = sanitizeFolderName(folder)
 
 	if err := os.MkdirAll(folder, os.ModePerm); err != nil {
@@ -40,8 +39,18 @@ func DownloadVideo(url, folder string) (string, error) {
 
 	path := path.Join(folder, "video.mp4")
 
-	fmt.Printf("Baixando vídeo de %s para %s\n", url, path)
+	if _, err := os.Stat(path); err == nil {
+		return path, nil
+	}
 
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return path, nil
+	}
+
+	return "", fmt.Errorf("erro ao verificar o arquivo")
+}
+
+func getVideoName(url, path string) (string, error) {
 	cmd := exec.Command("yt-dlp", "-f", "mp4", "-o", path, url)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -53,5 +62,18 @@ func DownloadVideo(url, folder string) (string, error) {
 	}
 
 	return path, nil
+}
+
+func DownloadVideo(url, folder string) (string, error) {
+
+	path, err := getPath(folder)
+
+	if err != nil {
+		return "", fmt.Errorf("erro ao criar diretório: %v", err)
+	}
+
+	fmt.Printf("Baixando vídeo de %s para %s\n", url, path)
+
+	return getVideoName(url, path)
 
 }
