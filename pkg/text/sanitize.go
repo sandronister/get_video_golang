@@ -2,11 +2,11 @@ package text
 
 import "regexp"
 
-func Sanitize(folder string) string {
+func Sanitize(input string) string {
 	invalidChars := regexp.MustCompile(`[<>:"/\\|?*]`)
-	folder = invalidChars.ReplaceAllString(folder, "_")
+	input = invalidChars.ReplaceAllString(input, "_")
 
-	folder = regexp.MustCompile(`^[\s.]+|[\s.]+$`).ReplaceAllString(folder, "")
+	input = regexp.MustCompile(`^[\s.]+|[\s.]+$`).ReplaceAllString(input, "")
 
 	reservedNames := map[string]bool{
 		"CON": true, "PRN": true, "AUX": true, "NUL": true,
@@ -16,9 +16,9 @@ func Sanitize(folder string) string {
 		"LPT4": true, "LPT5": true, "LPT6": true, "LPT7": true,
 		"LPT8": true, "LPT9": true,
 	}
-	if reservedNames[folder] {
-		folder = folder + "_folder"
+	if reservedNames[input] {
+		input = input + "_additional"
 	}
 
-	return folder
+	return input
 }
