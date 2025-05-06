@@ -12,15 +12,19 @@ func main() {
 
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Print("Enter the video URL: ")
+	fmt.Println("Informe a url do youtube: ")
 	urlPath, _ := reader.ReadString('\n')
 	urlPath = urlPath[:len(urlPath)-1]
 
-	fmt.Print("Enter the folder path to save the video: ")
+	fmt.Println("Informe a pasta que deseja salvar, se não existir será criada: ")
 	folderPath, _ := reader.ReadString('\n')
 	folderPath = folderPath[:len(folderPath)-1]
 
-	result, err := video.DownloadVideo(urlPath, folderPath)
+	fmt.Println("Deseja alta qualidade? (s/n): ")
+	quality, _ := reader.ReadString('\n')
+	quality = quality[:len(quality)-1]
+
+	result, err := video.DownloadVideo(urlPath, folderPath, quality)
 	if err != nil {
 		fmt.Println("Error downloading video:", err)
 		return
