@@ -11,6 +11,7 @@ import (
 func getAudio(entity *types.Input) error {
 	entity.SetNameAudio()
 	fmt.Printf("Baixando áudio de %s em qualidade regular...\n", entity.Url)
+	fmt.Printf("Salvando em %s\n", entity.Path)
 	cmd := exec.Command("yt-dlp", "-f", "bestaudio", "-o", entity.Path, entity.Url)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

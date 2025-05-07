@@ -1,6 +1,8 @@
 package types
 
-import "github.com/sandronister/get_video_golang/pkg/text"
+import (
+	"github.com/sandronister/get_video_golang/pkg/text"
+)
 
 type Input struct {
 	Url     string
@@ -22,12 +24,10 @@ func (i *Input) IsAudio() bool {
 func (i *Input) SetNameAudio() {
 	if i.IsAudio() {
 		i.Quality = "S"
-		i.Path = text.Sanitize(i.Path)
 		i.Path = i.Path + ".mp3"
 	}
 }
 
 func (i *Input) SetNameVideo() {
-	i.Path = text.Sanitize(i.Path)
 	i.Path = i.Path + ".mp4"
 }

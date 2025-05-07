@@ -9,6 +9,7 @@ import (
 )
 
 func getRegular(entity *types.Input) error {
+	entity.SetNameVideo()
 	fmt.Printf("Baixando vídeo %s em qualidade regular...\n", entity.Url)
 	cmd := exec.Command("yt-dlp", "-f", "mp4", "-o", entity.Path, entity.Url)
 	cmd.Stdout = os.Stdout
