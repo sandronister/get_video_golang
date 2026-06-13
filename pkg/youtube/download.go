@@ -11,7 +11,7 @@ func Download(entity *types.Input) error {
 	err := getPath(entity)
 
 	if err != nil {
-		return fmt.Errorf(err.Error())
+		return fmt.Errorf("erro ao preparar destino: %w", err)
 	}
 
 	if entity.IsAudio() {

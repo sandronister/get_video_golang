@@ -2,8 +2,6 @@ package youtube
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 
 	"github.com/sandronister/get_video_golang/pkg/youtube/types"
 )
@@ -12,11 +10,16 @@ func getAudio(entity *types.Input) error {
 	entity.SetNameAudio()
 	fmt.Printf("Baixando áudio de %s em qualidade regular...\n", entity.Url)
 	fmt.Printf("Salvando em %s\n", entity.Path)
-	cmd := exec.Command("yt-dlp", "-f", "bestaudio", "-o", entity.Path, entity.Url)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	cmd := newCommand(
+		entity.Browser,
+		entity.Profile,
+		"-f", "bestaudio",
+		"-x", "--audio-format", "mp3",
+		"-o", entity.Path,
+		entity.Url,
+	)
 
-	err := cmd.Run()
+	err := runCommand(cmd)
 
 	if err != nil {
 		return fmt.Errorf("erro ao baixar áudio: %v", err)

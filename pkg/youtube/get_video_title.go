@@ -1,13 +1,11 @@
 package youtube
 
 import (
-	"os/exec"
-
 	"github.com/sandronister/get_video_golang/pkg/text"
 )
 
-func getVideoTitle(url string) string {
-	cmd := exec.Command("yt-dlp", "--get-title", url)
+func getVideoTitle(url, browser, profile string) string {
+	cmd := newCommand(browser, profile, "--get-title", url)
 
 	output, err := cmd.Output()
 	if err != nil {

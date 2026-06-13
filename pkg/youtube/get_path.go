@@ -9,7 +9,7 @@ import (
 )
 
 func getPath(entity *types.Input) error {
-	title := getVideoTitle(entity.Url)
+	title := getVideoTitle(entity.Url, entity.Browser, entity.Profile)
 
 	if err := os.MkdirAll(entity.Path, os.ModePerm); err != nil {
 		fmt.Print("Erro ao criar diretório: ", err)

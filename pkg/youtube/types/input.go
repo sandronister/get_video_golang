@@ -9,6 +9,8 @@ type Input struct {
 	Quality string
 	Path    string
 	Kind    string
+	Browser string
+	Profile string
 }
 
 func (i *Input) IsQuality() bool {
