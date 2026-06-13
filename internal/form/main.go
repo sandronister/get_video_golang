@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/sandronister/get_video_golang/pkg/text"
 	"github.com/sandronister/get_video_golang/pkg/youtube/types"
@@ -14,20 +15,36 @@ func Start() *types.Input {
 	var kind string = "v"
 
 	fmt.Println("Informe a url do youtube: ")
-	urlPath, _ := reader.ReadString('\n')
-	urlPath = urlPath[:len(urlPath)-1]
+	urlPath := readLine(reader)
 
 	fmt.Println("Informe a pasta que deseja salvar, se não existir será criada: ")
-	folderPath, _ := reader.ReadString('\n')
-	folderPath = folderPath[:len(folderPath)-1]
+	folderPath := readLine(reader)
 
 	fmt.Println("Deseja somente o áudio? (s/n): ")
-	audio, _ := reader.ReadString('\n')
-	audio = audio[:len(audio)-1]
+	audio := readLine(reader)
 
 	fmt.Println("Deseja alta qualidade? (s/n): ")
-	quality, _ := reader.ReadString('\n')
-	quality = quality[:len(quality)-1]
+	quality := readLine(reader)
+
+	fmt.Println("Navegador autenticado no YouTube (chrome/firefox/edge/safari, padrão: chrome): ")
+	browser := readLine(reader)
+	if browser == "" {
+		browser = "chrome"
+	}
+
+	fmt.Println("Perfil do navegador (ex.: Default ou Profile 1; vazio usa o perfil padrão): ")
+	profile := readLine(reader)
+
+	cookieSource := browser
+	if profile != "" {
+		cookieSource += ":" + profile
+	}
+
+	fmt.Printf("A sessão do YouTube será lida de %s. Confirma? (s/n):\n", cookieSource)
+	if text.Sanitize(readLine(reader)) != "s" {
+		fmt.Println("Operação cancelada.")
+		return nil
+	}
 
 	if text.Sanitize(audio) == "s" {
 		kind = "a"
@@ -38,5 +55,12 @@ func Start() *types.Input {
 		Path:    text.Sanitize(folderPath),
 		Kind:    kind,
 		Quality: text.Sanitize(quality),
+		Browser: browser,
+		Profile: profile,
 	}
+}
+
+func readLine(reader *bufio.Reader) string {
+	value, _ := reader.ReadString('\n')
+	return strings.TrimSpace(value)
 }
