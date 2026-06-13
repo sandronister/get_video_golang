@@ -10,6 +10,9 @@ import (
 func main() {
 
 	entity := form.Start()
+	if entity == nil {
+		return
+	}
 
 	err := youtube.Download(entity)
 	if err != nil {
